@@ -1,3 +1,5 @@
+import java.awt.image.BufferedImage;
+
 public class HockneyCollage {
 	public static void main(String[] args) {
 		ImageGrid imageGrid;
@@ -5,7 +7,8 @@ public class HockneyCollage {
 		
 		filename = args[0];
 		imageGrid = new ImageGrid(filename);
-		imageGrid.splitImage(5, 5);
+		BufferedImage[][] grid = imageGrid.splitImage(5, 5);
+		imageGrid.writeOutArray(grid);
 	}
 
 	// public void initializeObjects() {

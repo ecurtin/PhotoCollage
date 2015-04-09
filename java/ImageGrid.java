@@ -17,7 +17,6 @@ public class ImageGrid {
 
 	public BufferedImage[][] splitImage(int rows, int columns) {
 		BufferedImage[][] smallImages = new BufferedImage[rows][columns];
-		int count = 0;
 		int smallHeight = mainImage.getHeight() / rows;
 		int smallWidth = mainImage.getWidth() / columns;
 
@@ -25,15 +24,23 @@ public class ImageGrid {
             for (int y = 0; y < rows; y++) {
                 smallImages[x][y] = mainImage.getSubimage(x * smallWidth, y
                         * smallHeight, smallWidth, smallHeight);
+            }
+        }
+
+        return smallImages;
+	}
+
+	public void writeOutArray(BufferedImage[][] smallImages) {
+		int count = 0;
+		for (int x = 0; x < smallImages.length; x++) {
+            for (int y = 0; y < smallImages[0].length; y++) {
                 try {
-                    ImageIO.write(smallImages[x][y], "png", new File("tile-"
+                    ImageIO.write(smallImages[x][y], "png", new File("./output/tile-"
                             + (count++) + ".png"));
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
             }
         }
-
-        return smallImages;
 	}
 }
