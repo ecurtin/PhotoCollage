@@ -1,20 +1,22 @@
+import java.lang.Math;
+
 public class Vector2D {
 
-	public float x = 0.0;
-	public float y = 0.0;
+	public double x = 0.0;
+	public double y = 0.0;
 
 // CREATE
 	Vector2D () {
 	}
 
-	Vector2D (float px, float py) {
+	Vector2D (double px, double py) {
 		x = px;
 		y = py;
 	}
 
 
 // MODIFY
-	Vector2D setTo(float px, float py) {
+	Vector2D setTo(double px, double py) {
 		x = px;
 		y = py;
 		return this;
@@ -31,13 +33,13 @@ public class Vector2D {
 		y = 0;
 		return this;
 	}
-	Vector2D scaleBy(float u, float v) {
+	Vector2D scaleBy(double u, double v) {
 		x *= u;
 		y *= v;
 		return this;
 	}
 
-	Vector2D scaleBy(float f) {
+	Vector2D scaleBy(double f) {
 		x *= f;
 		y *= f;
 		return this;
@@ -49,22 +51,22 @@ public class Vector2D {
 		return this;
 	}
 
-	Vector2D divideBy(float f) {
+	Vector2D divideBy(double f) {
 		x /= f;
 		y /= f;
 		return this;
 	}
 
-	Vector2D normalize() {
-		float n = sqrt(sq(x) + sq(y));
-		if (n>0.000001) {
-			x /= n;
-			y /= n;
-		}
-		return this;
-	}
+	// Vector2D normalize() {
+	// 	double n = sqrt(sq(x) + sq(y));
+	// 	if (n>0.000001) {
+	// 		x /= n;
+	// 		y /= n;
+	// 	}
+	// 	return this;
+	// }
 
-	Vector2D add(float u, float v) {
+	Vector2D add(double u, double v) {
 		x += u;
 		y += v;
 		return this;
@@ -76,22 +78,22 @@ public class Vector2D {
 		return this;
 	}
 
-	Vector2D add(float s, Vector2D vec) {
+	Vector2D add(double s, Vector2D vec) {
 		x += s * vec.x;
 		y += s * vec.y;
 		return this;
 	}
 
-	Vector2D rotateBy(float a) {
-		float xx = x;
-		float yy = y;
-		x = xx * cos(a) - yy * sin(a);
-		y = xx * sin(a) + yy * cos(a);
+	Vector2D rotateBy(double a) {
+		double xx = x;
+		double yy = y;
+		x = xx * Math.cos(a) - yy * Math.sin(a);
+		y = xx * Math.sin(a) + yy * Math.cos(a);
 		return this;
 	}
 
 	Vector2D left() {
-		float m = x;
+		double m = x;
 		x = - y;
 		y = m;
 		return this;
@@ -99,25 +101,25 @@ public class Vector2D {
 // turns 	Vector2Dtor left
 
 // OUTPUT vecEC
-	Vector2D clone() {
-		return(new Vector2D(x,y));
-	}
+	// Vector2D clone() {
+	// 	return(new Vector2D(x,y));
+	// }
 
 
 // OUTPUT TEST MEASURE
-	float norm() {
-		return(sqrt(sq(x) + sq(y)));
-	}
+	// double norm() {
+	// 	return(sqrt(sq(x) + sq(y)));
+	// }
 
 	boolean isNull() {
-		return((abs(x) + abs(y) < 0.000001));
+		return((Math.abs(x) + Math.abs(y) < 0.000001));
 	}
 
-	float angle() {
-		return(atan2(y,x));
+	double angle() {
+		return(Math.atan2(y,x));
 	}
 
-	String toString() {
+	public String toString() {
 		return "<" + x + ", " + y + ">";
 	}
 

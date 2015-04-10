@@ -3,9 +3,12 @@ import java.io.File;
 import java.io.IOException;
 import javax.imageio.ImageIO;
 import java.awt.Graphics2D;
+import java.lang.Math;
+import java.util.Random;
 
 public class ImageGrid {
 	BufferedImage mainImage;
+	Random random = new Random();
 
 	public ImageGrid(BufferedImage mainImage) {
 		this.mainImage = mainImage;
@@ -17,7 +20,7 @@ public class ImageGrid {
 		//int smallWidth = mainImage.getWidth() / columns;
 
 		int heightDelta = mainImage.getHeight() / rows;
-		int widthDelta = mainImage.getWidth() / cols;
+		int widthDelta = mainImage.getWidth() / columns;
 
         for (int x = 0; x < columns; x++) {
             for (int y = 0; y < rows; y++) {
@@ -26,9 +29,9 @@ public class ImageGrid {
                 smallImages[x][y] = new ImageTile(mainImage.getSubimage(originX, 
                 														originY, 
                 														subImageWidth, 
-                														smallHeight),
+                														subImageHeight),
                 								  originX, 
-                						 		  originY;
+                						 		  originY);
             }
         }
 
@@ -38,11 +41,11 @@ public class ImageGrid {
 	public ImageTile[][] randomScatter(ImageTile[][] array, int maxDistance) {
 		for(int i = 0; i < array.length; i++) {
 			for (int j = 0; j < array[0].length; j++) {
-				Vector2D vec = new Vector2D(0.0, (float) maxDistance);
-				vec.scaleBy(Math.random.nextFloat());
-				vec.rotateBy(2 * Math.PI * Math.random.nextFloat());
-				int vecX = Math.round(vec.x);
-				int vecY = Math.round(vec.y);
+				Vector2D vec = new Vector2D(0.0, (double) maxDistance);
+				vec.scaleBy(random.nextDouble());
+				vec.rotateBy(2 * Math.PI * random.nextDouble());
+				int vecX = (int) Math.round(vec.x);
+				int vecY = (int) Math.round(vec.y);
 
 				array[i][j].destX = array[i][j].originX + vecX;
 				array[i][j].destY = array[i][j].originY + vecY;
@@ -54,7 +57,7 @@ public class ImageGrid {
 	public ImageTile[][] randomShow(ImageTile[][] array) {
 		for(int i = 0; i < array.length; i++) {
 			for (int j = 0; j < array[0].length; j++) {
-				float coin = Math.random.nextFloat();
+				double coin = random.nextDouble();
 				if(coin >= 0.5) {
 					array[i][j].show = true;
 				}
@@ -66,21 +69,21 @@ public class ImageGrid {
 		return array;
 	}
 
-	public ImageTile[][] assignRandomZoom(ImageTile[][] array, float maxZoom, float minZoom) {
+	public ImageTile[][] assignrandomZoom(ImageTile[][] array, double maxZoom, double minZoom) {
 		for(int i = 0; i < array.length; i++) {
 			for (int j = 0; j < array[0].length; j++) {
-				  array[i][j].zoomFactor = minZoom + (Math.nextFloat() * (maxZoom - minZoom));
+				  array[i][j].zoomFactor = minZoom + (random.nextDouble() * (maxZoom - minZoom));
 			}
 		}
 		return array;
 	}
 
-	public ImageTile[][] emphasizePoint(ImageTile[][] array, int emX, int emY, float maxZoom) {
+	public ImageTile[][] emphasizePoint(ImageTile[][] array, int emX, int emY, double maxZoom) {
 		for(int i = 0; i < array.length; i++) {
 			for (int j = 0; j < array[0].length; j++) {
 				if(array[i][j].contains(emX, emY)) {
 					array[i][j].show = true;
-					array[i][j].zoomFactor = 1 + (Math.nextFloat() * (maxZoom -1));
+					array[i][j].zoomFactor = 1 + (random.nextDouble() * (maxZoom -1));
 				}
 			}
 		}
@@ -91,10 +94,7 @@ public class ImageGrid {
 		Graphics2D gBottom = bottom.createGraphics();
 		for(int i = 0; i < tiles.length; i++) {
 			for (int j = 0; j < tiles[0].length; j++) {
-				if(array[i][j].contains(emX, emY)) {
-					array[i][j].show = true;
-					array[i][j].zoomFactor = 1 + (Math.nextFloat() * (maxZoom -1));
-				}
+
 			}
 		}
 		gBottom.dispose();

@@ -14,7 +14,8 @@ public class HockneyCollage {
 			filename = args[0];
 			mainImage = ImageIO.read(new File(filename));
 			imageGrid = new ImageGrid(mainImage);
-			BufferedImage[][] grid = imageGrid.splitImage(5, 5);
+			ImageTile[][] grid = imageGrid.splitImage(100, 100, mainImage.getWidth()/50, mainImage.getHeight()/50);
+			BufferedImage base = new BufferedImage(mainImage.getWidth(), mainImage.getHeight(), BufferedImage.TYPE_INT_RGB);
 			imageGrid.writeOutArray(grid);
         } catch (IOException e) {
             e.printStackTrace();

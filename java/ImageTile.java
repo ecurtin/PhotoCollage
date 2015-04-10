@@ -1,3 +1,5 @@
+import java.awt.image.BufferedImage;
+
 public class ImageTile {
 	public BufferedImage image;
 	public int originX;
@@ -5,7 +7,7 @@ public class ImageTile {
 	public int destX;
 	public int destY;
 	public boolean show = true;
-	public float zoomFactor = 1.0;
+	public double zoomFactor = 1.0;
 
 	public ImageTile(BufferedImage img, int originX, int originY) {
 		image = img;
