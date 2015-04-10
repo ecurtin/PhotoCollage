@@ -14,24 +14,36 @@ public class ImageGrid {
 		this.mainImage = mainImage;
 	}
 
+	public void nullCheck(ImageTile[][] tiles) {
+		for()
+	}
+
 	public ImageTile[][] splitImage(int rows, int columns, int subImageWidth, int subImageHeight) {
+		int heightDelta = mainImage.getHeight() / rows;
+		int widthDelta = mainImage.getWidth() / columns;
+
+		// while((columns - 1) * widthDelta)
+
 		ImageTile[][] smallImages = new ImageTile[rows][columns];
 		//int smallHeight = mainImage.getHeight() / rows;
 		//int smallWidth = mainImage.getWidth() / columns;
 
-		int heightDelta = mainImage.getHeight() / rows;
-		int widthDelta = mainImage.getWidth() / columns;
+
 
         for (int x = 0; x < columns; x++) {
             for (int y = 0; y < rows; y++) {
             	int originX = x * heightDelta;
             	int originY = y * widthDelta;
-                smallImages[x][y] = new ImageTile(mainImage.getSubimage(originX, 
-                														originY, 
-                														subImageWidth, 
-                														subImageHeight),
-                								  originX, 
-                						 		  originY);
+            	if(originY + subImageHeight < mainImage.getHeight() &&
+            	   originX + subImageWidth  < mainImage.getWidth() ) {
+	                smallImages[y][x] = new ImageTile(mainImage.getSubimage(originX, 
+														originY, 
+														subImageWidth, 
+														subImageHeight),
+								  originX, 
+						 		  originY);
+            	}
+
             }
         }
 
@@ -94,7 +106,7 @@ public class ImageGrid {
 		Graphics2D gBottom = bottom.createGraphics();
 		for(int i = 0; i < tiles.length; i++) {
 			for (int j = 0; j < tiles[0].length; j++) {
-
+				gBottom.drawImage(tiles[i][j].image, tiles[i][j].destX, tiles[i][j].destY, null);
 			}
 		}
 		gBottom.dispose();

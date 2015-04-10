@@ -16,7 +16,9 @@ public class HockneyCollage {
 			imageGrid = new ImageGrid(mainImage);
 			ImageTile[][] grid = imageGrid.splitImage(100, 100, mainImage.getWidth()/50, mainImage.getHeight()/50);
 			BufferedImage base = new BufferedImage(mainImage.getWidth(), mainImage.getHeight(), BufferedImage.TYPE_INT_RGB);
-			imageGrid.writeOutArray(grid);
+			//imageGrid.writeOutArray(grid);
+			imageGrid.randomScatter(grid, 20);
+			imageGrid.compositeTiles(base, grid);
         } catch (IOException e) {
             e.printStackTrace();
         }
