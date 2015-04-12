@@ -7,6 +7,7 @@ public class ImageTile {
 	public int destX;
 	public int destY;
 	public boolean show = true;
+	public boolean emphasis = false;
 	public double zoomFactor = 1.0;
 
 	public ImageTile(BufferedImage img, int originX, int originY) {

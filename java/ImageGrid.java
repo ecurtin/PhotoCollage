@@ -15,42 +15,61 @@ public class ImageGrid {
 	}
 
 	public void nullCheck(ImageTile[][] tiles) {
-		for()
+		System.out.println("beginning null check");
+		for(int i = 0; i < tiles.length; i++) {
+			for (int j = 0; j < tiles[0].length; j++) {
+				if (tiles[i][j] == null) {
+					System.out.println("Null: ["+i+"]["+j+"]\n");
+				}
+			}
+		}
+		System.out.println("Null check complete");
 	}
 
 	public ImageTile[][] splitImage(int rows, int columns, int subImageWidth, int subImageHeight) {
 		int heightDelta = mainImage.getHeight() / rows;
 		int widthDelta = mainImage.getWidth() / columns;
 
-		// while((columns - 1) * widthDelta)
+		while((((columns - 1) * widthDelta) + subImageWidth) > mainImage.getWidth()) {
+			columns--;
+			widthDelta = mainImage.getWidth() / columns;
+			System.out.println("reducing columns");
+		}
+
+		while((((rows - 1) * heightDelta) + subImageHeight) > mainImage.getHeight()) {
+			rows--;
+			heightDelta = mainImage.getHeight() / rows;
+			System.out.println("reducing rows");
+		}
 
 		ImageTile[][] smallImages = new ImageTile[rows][columns];
 		//int smallHeight = mainImage.getHeight() / rows;
 		//int smallWidth = mainImage.getWidth() / columns;
+		// System.out.println("FINALLY: smallImages["+rows+"]["+columns+"]");
+
+
+        for (int x = 0; x < smallImages.length; x++) {
+            for (int y = 0; y < smallImages[0].length; y++) {
+            	// System.out.println("smallImages["+x+"]["+y+"]");
+            	int originY = x * heightDelta;
+            	int originX = y * widthDelta;
 
 
 
-        for (int x = 0; x < columns; x++) {
-            for (int y = 0; y < rows; y++) {
-            	int originX = x * heightDelta;
-            	int originY = y * widthDelta;
-            	if(originY + subImageHeight < mainImage.getHeight() &&
-            	   originX + subImageWidth  < mainImage.getWidth() ) {
-	                smallImages[y][x] = new ImageTile(mainImage.getSubimage(originX, 
-														originY, 
-														subImageWidth, 
-														subImageHeight),
-								  originX, 
-						 		  originY);
-            	}
+            	// if(originY + subImageHeight < mainImage.getHeight() &&
+            	//    originX + subImageWidth  < mainImage.getWidth() ) {
+            	BufferedImage subImage = mainImage.getSubimage(originX, originY, subImageWidth, subImageHeight);
+                smallImages[x][y] = new ImageTile(subImage, originX, originY);
+            	// }
 
             }
         }
-
+        nullCheck(smallImages);
         return smallImages;
 	}
 
 	public ImageTile[][] randomScatter(ImageTile[][] array, int maxDistance) {
+		nullCheck(array);
 		for(int i = 0; i < array.length; i++) {
 			for (int j = 0; j < array[0].length; j++) {
 				Vector2D vec = new Vector2D(0.0, (double) maxDistance);
@@ -81,7 +100,7 @@ public class ImageGrid {
 		return array;
 	}
 
-	public ImageTile[][] assignrandomZoom(ImageTile[][] array, double maxZoom, double minZoom) {
+	public ImageTile[][] assignRandomZoom(ImageTile[][] array, double maxZoom, double minZoom) {
 		for(int i = 0; i < array.length; i++) {
 			for (int j = 0; j < array[0].length; j++) {
 				  array[i][j].zoomFactor = minZoom + (random.nextDouble() * (maxZoom - minZoom));
@@ -91,11 +110,16 @@ public class ImageGrid {
 	}
 
 	public ImageTile[][] emphasizePoint(ImageTile[][] array, int emX, int emY, double maxZoom) {
+		System.out.println("emphasizing Point: ("+emX +", "+emY+")");
 		for(int i = 0; i < array.length; i++) {
 			for (int j = 0; j < array[0].length; j++) {
 				if(array[i][j].contains(emX, emY)) {
 					array[i][j].show = true;
+					array[i][j].emphasis = true;
 					array[i][j].zoomFactor = 1 + (random.nextDouble() * (maxZoom -1));
+				}
+				else if(array[i][j].emphasis == false) {
+					array[i][j].show = false;
 				}
 			}
 		}
@@ -106,7 +130,9 @@ public class ImageGrid {
 		Graphics2D gBottom = bottom.createGraphics();
 		for(int i = 0; i < tiles.length; i++) {
 			for (int j = 0; j < tiles[0].length; j++) {
-				gBottom.drawImage(tiles[i][j].image, tiles[i][j].destX, tiles[i][j].destY, null);
+				if(tiles[i][j].show == true) {
+					gBottom.drawImage(tiles[i][j].image, tiles[i][j].destX, tiles[i][j].destY, null);
+				}
 			}
 		}
 		gBottom.dispose();
@@ -132,5 +158,13 @@ public class ImageGrid {
 		g.drawImage(top, x, y, null);
 		g.dispose();
 		return bottom;
+	}
+
+	public void outputImage(BufferedImage image) {
+	    try {
+	        ImageIO.write(image, "png", new File("./output/HockneyCollage.png"));
+	    } catch (IOException e) {
+	        e.printStackTrace();
+	    }
 	}
 }
