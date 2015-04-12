@@ -5,6 +5,8 @@ import javax.imageio.ImageIO;
 import java.awt.Graphics2D;
 import java.lang.Math;
 import java.util.Random;
+import java.awt.geom.AffineTransform;
+import java.awt.image.AffineTransformOp;
 
 public class ImageGrid {
 	BufferedImage mainImage;
@@ -85,11 +87,11 @@ public class ImageGrid {
 		return array;
 	}
 
-	public ImageTile[][] randomShow(ImageTile[][] array) {
+	public ImageTile[][] randomShow(ImageTile[][] array, double density) {
 		for(int i = 0; i < array.length; i++) {
 			for (int j = 0; j < array[0].length; j++) {
 				double coin = random.nextDouble();
-				if(coin >= 0.5) {
+				if(coin >= (1 - density)) {
 					array[i][j].show = true;
 				}
 				else {
@@ -117,21 +119,49 @@ public class ImageGrid {
 					array[i][j].show = true;
 					array[i][j].emphasis = true;
 					array[i][j].zoomFactor = 1 + (random.nextDouble() * (maxZoom -1));
+					// array[i][j].zoomFactor = maxZoom;
+					array[i][j].destX = array[i][j].originX;
+					array[i][j].destY = array[i][j].originY;
 				}
-				else if(array[i][j].emphasis == false) {
-					array[i][j].show = false;
-				}
+				// else if(array[i][j].emphasis == false) {
+				// 	array[i][j].show = false;
+				// }
 			}
 		}
 		return array;
 	}
 
-	public BufferedImage compositeTiles(BufferedImage bottom, ImageTile[][] tiles) {
+	public BufferedImage compositeTilesNormal(BufferedImage bottom, ImageTile[][] tiles) {
 		Graphics2D gBottom = bottom.createGraphics();
 		for(int i = 0; i < tiles.length; i++) {
 			for (int j = 0; j < tiles[0].length; j++) {
-				if(tiles[i][j].show == true) {
-					gBottom.drawImage(tiles[i][j].image, tiles[i][j].destX, tiles[i][j].destY, null);
+				if(tiles[i][j].show == true && tiles[i][j].emphasis == false) {
+					AffineTransform affT = new AffineTransform();
+					affT.scale(tiles[i][j].zoomFactor, tiles[i][j].zoomFactor);
+					// affT.translate(tiles[i][j].destX, tiles[i][j].destY);
+
+					AffineTransformOp affTOp = new AffineTransformOp(affT, AffineTransformOp.TYPE_BICUBIC);
+
+					gBottom.drawImage(tiles[i][j].image, affTOp, tiles[i][j].destX, tiles[i][j].destY);
+				}
+			}
+		}
+		gBottom.dispose();
+		return bottom;
+	}
+
+	public BufferedImage compositeTilesEmphasis(BufferedImage bottom, ImageTile[][] tiles) {
+		Graphics2D gBottom = bottom.createGraphics();
+		for(int i = 0; i < tiles.length; i++) {
+			for (int j = 0; j < tiles[0].length; j++) {
+				if(tiles[i][j].emphasis == true) {
+					AffineTransform affT = new AffineTransform();
+					affT.scale(tiles[i][j].zoomFactor, tiles[i][j].zoomFactor);
+					// affT.translate(tiles[i][j].destX, tiles[i][j].destY);
+
+					AffineTransformOp affTOp = new AffineTransformOp(affT, AffineTransformOp.TYPE_BILINEAR);
+
+					gBottom.drawImage(tiles[i][j].image, affTOp, tiles[i][j].destX, tiles[i][j].destY);
 				}
 			}
 		}

@@ -1,1 +1,1 @@
-java HockneyCollage ./input/DavidBowie.jpeg 235 236 230 2 100 50 75 40 40 10 2 0.5 233 226 322 225 277 314
+java HockneyCollage ./input/DavidBowie.jpeg 235 236 230 2 50 25 50 25 30 30 1.2 0.5 0.9 233 226 322 225 277 314
