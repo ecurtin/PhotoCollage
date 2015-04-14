@@ -27,6 +27,7 @@ public class HockneyCollage {
 		int minScatter;
 		double maxZoom;
 		double minZoom;
+		double density;
 		int[] emphasisPoints;
 
 		System.out.println("ARGS:");
@@ -49,10 +50,11 @@ public class HockneyCollage {
 		minScatter = Integer.parseInt(args[10]);
 		maxZoom = Double.parseDouble(args[11]);
 		minZoom = Double.parseDouble(args[12]);
+		density = Double.parseDouble(args[13]);
 		
-		emphasisPoints = new int[args.length - 13];
-		for(int i = 13; i < args.length; i++) {
-			emphasisPoints[i - 13] = Integer.parseInt(args[i]); 
+		emphasisPoints = new int[args.length - 14];
+		for(int i = 14; i < args.length; i++) {
+			emphasisPoints[i - 14] = Integer.parseInt(args[i]); 
 		}
 		//System.out.println("emphasisPoints.lenght: "+emphasisPoints.length);
 
@@ -97,20 +99,19 @@ public class HockneyCollage {
 				//tileLayers[layer] = new ImageTile[thisLayersRows][thisLayersColumns];
 				tileLayers[layer] = imageGrid.splitImage(thisLayersRows, thisLayersColumns, thisLayersTileWidth, thisLayersTileHeight);
 				tileLayers[layer] = imageGrid.randomScatter(tileLayers[layer], (int) Math.round((minScatter + (random.nextDouble() * (maxScatter - minScatter)))));
-				tileLayers[layer] = imageGrid.randomShow(tileLayers[layer]);
-				// tileLayers[layer] = imageGrid.assignRandomZoom(tileLayers[layer], maxZoom, minZoom);
+				tileLayers[layer] = imageGrid.randomShow(tileLayers[layer], density);
+				tileLayers[layer] = imageGrid.assignRandomZoom(tileLayers[layer], maxZoom, minZoom);
 				for(int i = 0; i < emphasisPoints.length; i = i + 2) {
 					tileLayers[layer] = imageGrid.emphasizePoint(tileLayers[layer], emphasisPoints[i], emphasisPoints[i + 1], maxZoom);
 				}
 			}
 
-
-			//ImageTile[][] grid = imageGrid.splitImage(20, 20, mainImage.getWidth()/10, mainImage.getHeight()/10);
-			// imageGrid.nullCheck(grid);
-			//imageGrid.writeOutArray(grid);
-			//imageGrid.randomScatter(grid, 10);
 			for(int i = 0; i < tileLayers.length; i++) {
-				base = imageGrid.compositeTiles(base, tileLayers[i]);
+				base = imageGrid.compositeTilesNormal(base, tileLayers[i]);
+			}
+
+			for(int i = tileLayers.length - 1; i >= 0; i--) {
+				base = imageGrid.compositeTilesEmphasis(base, tileLayers[i]);
 			}
 
 			imageGrid.outputImage(base);
