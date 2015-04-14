@@ -91,13 +91,7 @@ public class ImageGrid {
 	public ImageTile[][] randomShow(ImageTile[][] array, double density) {
 		for(int i = 0; i < array.length; i++) {
 			for (int j = 0; j < array[0].length; j++) {
-				double coin = random.nextDouble();
-				if(coin >= (1 - density)) {
-					array[i][j].show = true;
-				}
-				else {
-					array[i][j].show = false;
-				}
+					array[i][j].randomShow(density);
 			}
 		}
 		return array;
@@ -106,7 +100,7 @@ public class ImageGrid {
 	public ImageTile[][] assignRandomZoom(ImageTile[][] array, double maxZoom, double minZoom) {
 		for(int i = 0; i < array.length; i++) {
 			for (int j = 0; j < array[0].length; j++) {
-				  array[i][j].zoomFactor = minZoom + (random.nextDouble() * (maxZoom - minZoom));
+				  array[i][j].randomZoom(maxZoom, minZoom);
 			}
 		}
 		return array;
@@ -136,15 +130,17 @@ public class ImageGrid {
 		Graphics2D gBottom = bottom.createGraphics();
 		for(int i = 0; i < tiles.length; i++) {
 			for (int j = 0; j < tiles[0].length; j++) {
-				if(tiles[i][j].show == true && tiles[i][j].emphasis == false) {
-					AffineTransform affT = new AffineTransform();
-					affT.scale(tiles[i][j].zoomFactor, tiles[i][j].zoomFactor);
-					// affT.translate(tiles[i][j].destX, tiles[i][j].destY);
+				// if(tiles[i][j].show == true && tiles[i][j].emphasis == false) {
+					
+					
+				// 	// affT.translate(tiles[i][j].destX, tiles[i][j].destY);
 
-					AffineTransformOp affTOp = new AffineTransformOp(affT, AffineTransformOp.TYPE_BICUBIC);
+				// 	AffineTransformOp affTOp = new AffineTransformOp(affT, AffineTransformOp.TYPE_BICUBIC);
 
-					gBottom.drawImage(tiles[i][j].image, affTOp, tiles[i][j].destX, tiles[i][j].destY);
-				}
+				// 	gBottom.drawImage(tiles[i][j].image, affTOp, tiles[i][j].destX, tiles[i][j].destY);
+				// }
+
+				tiles[i][j].compositeTile(gBottom);
 			}
 		}
 		gBottom.dispose();

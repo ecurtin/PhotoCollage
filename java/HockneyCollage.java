@@ -98,7 +98,12 @@ public class HockneyCollage {
 				int thisLayersRows = (mainImage.getHeight() / thisLayersTileHeight) * 2;
 				//tileLayers[layer] = new ImageTile[thisLayersRows][thisLayersColumns];
 				tileLayers[layer] = imageGrid.splitImage(thisLayersRows, thisLayersColumns, thisLayersTileWidth, thisLayersTileHeight);
-				tileLayers[layer] = imageGrid.randomScatter(tileLayers[layer], (int) Math.round((minScatter + (random.nextDouble() * (maxScatter - minScatter)))));
+				
+				for(int i = 0; i < layer[0].length; i++) {
+					for(int j = 0; j < layer[0][0].length; j++)
+						tileLayers[layer][i][j].scatter(minScatter, maxScatter);
+				}
+				tileLayers[layer] = imageGrid.randomScatter(tileLayers[layer], );
 				tileLayers[layer] = imageGrid.randomShow(tileLayers[layer], density);
 				tileLayers[layer] = imageGrid.assignRandomZoom(tileLayers[layer], maxZoom, minZoom);
 				for(int i = 0; i < emphasisPoints.length; i = i + 2) {
