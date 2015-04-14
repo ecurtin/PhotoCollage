@@ -72,14 +72,15 @@ public class ImageGrid {
 		nullCheck(array);
 		for(int i = 0; i < array.length; i++) {
 			for (int j = 0; j < array[0].length; j++) {
-				Vector2D vec = new Vector2D(0.0, (double) maxDistance);
-				vec.scaleBy(random.nextDouble());
-				vec.rotateBy(2 * Math.PI * random.nextDouble());
-				int vecX = (int) Math.round(vec.x);
-				int vecY = (int) Math.round(vec.y);
+				array[i][j].scatter(maxDistance);
+				// Vector2D vec = new Vector2D(0.0, (double) maxDistance);
+				// vec.scaleBy(random.nextDouble());
+				// vec.rotateBy(2 * Math.PI * random.nextDouble());
+				// int vecX = (int) Math.round(vec.x);
+				// int vecY = (int) Math.round(vec.y);
 
-				array[i][j].destX = array[i][j].originX + vecX;
-				array[i][j].destY = array[i][j].originY + vecY;
+				// array[i][j].destX = array[i][j].originX + vecX;
+				// array[i][j].destY = array[i][j].originY + vecY;
 			}
 		}
 		return array;
