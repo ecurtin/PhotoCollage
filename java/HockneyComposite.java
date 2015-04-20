@@ -18,7 +18,8 @@ public class HockneyComposite {
 		int baseG;
 		int baseB;
 		int rows;
-		int columns
+		int columns;
+		int borderWidth;
 		int maxScatter;
 		int minScatter;
 		double maxZoom;
@@ -39,19 +40,20 @@ public class HockneyComposite {
 		baseB = Integer.parseInt(args[3]);
 		rows = Integer.parseInt(args[4]);
 		columns = Integer.parseInt(args[5]);
-		maxScatter = Integer.parseInt(args[6]);
-		minScatter = Integer.parseInt(args[7]);
-		maxZoom = Double.parseDouble(args[8]);
-		minZoom = Double.parseDouble(args[9]);
+		borderWidth = Integer.parseInt(args[6]);
+		maxScatter = Integer.parseInt(args[7]);
+		minScatter = Integer.parseInt(args[8]);
+		maxZoom = Double.parseDouble(args[9]);
+		minZoom = Double.parseDouble(args[10]);
 		
-		emphasisPoints = new int[args.length - 10];
-		for(int i = 10; i < args.length; i++) {
-			emphasisPoints[i - 10] = Integer.parseInt(args[i]); 
+		emphasisPoints = new int[args.length - 11];
+		for(int i = 11; i < args.length; i++) {
+			emphasisPoints[i - 11] = Integer.parseInt(args[i]); 
 		}
 		//System.out.println("emphasisPoints.lenght: "+emphasisPoints.length);
 
 		System.out.println("filename     : "+ filename);
-		System.out.println("border color : ("+baseR+", "+baseG+", "+baseB+")")
+		System.out.println("border color : ("+baseR+", "+baseG+", "+baseB+")");
 		System.out.println("rows:        : "+ rows);
 		System.out.println("columns      : "+ columns);
 		System.out.println("maxScatter   : "+ maxScatter);
@@ -63,5 +65,54 @@ public class HockneyComposite {
 			//System.out.println("i: "+i);
 			System.out.println("emphasisPt   : ("+ emphasisPoints[i] + ", "+ emphasisPoints[i+1] +")");
 		}
+
+		tiles = new ImageTile[rows][columns];
+
+		try {
+			mainImage = ImageIO.read(new File(filename));
+		}
+		catch(Exception e) {
+			e.printStackTrace();
+		}
+
+		int tileWidth = mainImage.getWidth() / columns;
+		int tileHeight = mainImage.getHeight() / rows;			
+
+		int baseWidth = (columns * tileWidth) + ((columns + 1) * borderWidth);
+		int baseHeight = (rows * tileHeight) + ((rows + 1) * borderWidth);
+
+		base = new BufferedImage(baseWidth, baseHeight, BufferedImage.TYPE_INT_RGB);
+		Graphics2D g = base.createGraphics();
+		g.setPaint(new Color(baseR, baseG, baseB));
+		g.fillRect(0, 0, base.getWidth(), base.getHeight());
+
+		int x = 0;
+		int y = 0;
+		int destX;
+		int destY;
+
+		for(int i  = 0; i < tiles.length; i++) {
+			destY = borderWidth + (tileHeight + borderWidth) * i;
+			y = tileHeight * i;
+
+			for(int j = 0; j < tiles[0].length; j++) {
+				destX = borderWidth + (tileWidth + borderWidth) * j;
+				x = tileWidth * j;
+
+				tiles[i][j] = new ImageTile(mainImage, x, y, minScatter, maxScatter);
+				tiles[i][j].setDestinationCoordinates(destX, destY);
+			}
+
+		}
+
+		Graphics2D mainImageGraphics = mainImage.createGraphics();
+		for(int i  = 0; i < tiles.length; i++) {
+			for(int j = 0; j < tiles[0].length; j++) {
+				mainImageGraphics = tiles[i][j].compositeTile(mainImageGraphics);
+			}
+		}
+		mainImageGraphics.dispose();
+
+		
 	}
 }

@@ -5,8 +5,10 @@ JC = javac
 	$(JC) $(JFLAGS) $*.java
 
 CLASSES = \
+	HockneyComposite.java \
 	HockneyCollage.java \
 	ImageGrid.java \
+	ImageTile.java \
 
 default: classes
 

@@ -70,11 +70,11 @@ public class ImageGrid {
         return smallImages;
 	}
 
-	public ImageTile[][] randomScatter(ImageTile[][] array, int maxDistance) {
+	public ImageTile[][] randomScatter(ImageTile[][] array, int minDistance, int maxDistance) {
 		nullCheck(array);
 		for(int i = 0; i < array.length; i++) {
 			for (int j = 0; j < array[0].length; j++) {
-				array[i][j].scatter(maxDistance);
+				array[i][j].scatter(minDistance, maxDistance);
 				// Vector2D vec = new Vector2D(0.0, (double) maxDistance);
 				// vec.scaleBy(random.nextDouble());
 				// vec.rotateBy(2 * Math.PI * random.nextDouble());
@@ -97,7 +97,7 @@ public class ImageGrid {
 		return array;
 	}
 
-	public ImageTile[][] assignRandomZoom(ImageTile[][] array, double maxZoom, double minZoom) {
+	public ImageTile[][] assignRandomZoom(ImageTile[][] array, double minZoom, double maxZoom) {
 		for(int i = 0; i < array.length; i++) {
 			for (int j = 0; j < array[0].length; j++) {
 				  array[i][j].randomZoom(maxZoom, minZoom);

@@ -92,23 +92,26 @@ public class HockneyCollage {
 			int heightDelta = (maxTileHeight - minTileHeight) / layers;
 
 			for(int layer = 0; layer < layers; layer++) {
-				int thisLayersTileWidth = minTileWidth + (layer * widthDelta);
-				int thisLayersTileHeight = minTileHeight + (layer * heightDelta);
-				int thisLayersColumns = (mainImage.getWidth() / thisLayersTileWidth) * 2;
-				int thisLayersRows = (mainImage.getHeight() / thisLayersTileHeight) * 2;
-				//tileLayers[layer] = new ImageTile[thisLayersRows][thisLayersColumns];
-				tileLayers[layer] = imageGrid.splitImage(thisLayersRows, thisLayersColumns, thisLayersTileWidth, thisLayersTileHeight);
+				// int thisLayersTileWidth = minTileWidth + (layer * widthDelta);
+				// int thisLayersTileHeight = minTileHeight + (layer * heightDelta);
+				// int thisLayersColumns = (mainImage.getWidth() / thisLayersTileWidth) * 2;
+				// int thisLayersRows = (mainImage.getHeight() / thisLayersTileHeight) * 2;
+				// //tileLayers[layer] = new ImageTile[thisLayersRows][thisLayersColumns];
+				// tileLayers[layer] = imageGrid.splitImage(thisLayersRows, thisLayersColumns, thisLayersTileWidth, thisLayersTileHeight);
 				
-				for(int i = 0; i < layer[0].length; i++) {
-					for(int j = 0; j < layer[0][0].length; j++)
-						tileLayers[layer][i][j].scatter(minScatter, maxScatter);
-				}
-				tileLayers[layer] = imageGrid.randomScatter(tileLayers[layer], );
-				tileLayers[layer] = imageGrid.randomShow(tileLayers[layer], density);
-				tileLayers[layer] = imageGrid.assignRandomZoom(tileLayers[layer], maxZoom, minZoom);
-				for(int i = 0; i < emphasisPoints.length; i = i + 2) {
-					tileLayers[layer] = imageGrid.emphasizePoint(tileLayers[layer], emphasisPoints[i], emphasisPoints[i + 1], maxZoom);
-				}
+				// for(int i = 0; i < layer[0].length; i++) {
+				// 	for(int j = 0; j < layer[0][0].length; j++)
+				// 		tileLayers[layer][i][j].scatter(minScatter, maxScatter);
+				// 		tileLayers[layer][i][j].randomShow(density);
+				// 		tileLayers[layer][i][j].randomZoom(minZoom, maxZoom);
+						
+				// }
+				// //tileLayers[layer] = imageGrid.randomScatter(tileLayers[layer], );
+				// tileLayers[layer] = imageGrid.randomShow(tileLayers[layer], density);
+				// tileLayers[layer] = imageGrid.assignRandomZoom(tileLayers[layer], maxZoom, minZoom);
+				// for(int i = 0; i < emphasisPoints.length; i = i + 2) {
+				// 	tileLayers[layer] = imageGrid.emphasizePoint(tileLayers[layer], emphasisPoints[i], emphasisPoints[i + 1], maxZoom);
+				// }
 			}
 
 			for(int i = 0; i < tileLayers.length; i++) {

@@ -25,18 +25,41 @@ public class ImageTile {
 		affT = new AffineTransform();
 	}
 
+	public ImageTile(BufferedImage img, int startX, int startY, int minScatter, int maxScatter) {
+		image = img;
+		random = new Random();
+		affT = new AffineTransform();
+
+		int x = -1;
+		int y = -1;
+
+		double distance = minScatter + (random.nextDouble() * (maxScatter - minScatter));
+		Vector2D vec = new Vector2D(0.0, distance);
+		vec.scaleBy(random.nextDouble());
+
+		while(x < 0 || x > image.getWidth() || y < 0 || y > image.getHeight()) {
+			vec.rotateBy(2 * Math.PI * random.nextDouble());
+			int vecX = (int) Math.round(vec.x);
+			int vecY = (int) Math.round(vec.y);
+			x = startX + vecX;
+			y = startY + vecY;
+		}
+
+		this.originX = x;
+		this.originY = y;
+	}
+
 	public boolean contains(int x, int y) {
 		boolean ret = false;
-		if( y > originY && y < image.getHeight() + originY 
+		if( y > originY && y < (image.getHeight() + originY) 
 			&&
-			x > originX && x < image.getWidth() + originX) {
+			x > originX && x < (image.getWidth() + originX)) {
 			ret = true;
 		}
 		return ret;
 	}
 
 	public void scatter(int minScatter, int maxScatter) {
-
 		double distance = minScatter + (random.nextDouble() * (maxScatter - minScatter));
 		Vector2D vec = new Vector2D(0.0, distance);
 		vec.scaleBy(random.nextDouble());
@@ -63,21 +86,29 @@ public class ImageTile {
 		affT.scale(zoom, zoom);
 	}
 
-	public void compositeTile(Graphics2D gBottom) {
+	public Graphics2D compositeTile(Graphics2D gBottom) {
 		if(this.show == true) {
 			AffineTransformOp affTOp = new AffineTransformOp(affT, AffineTransformOp.TYPE_BICUBIC);
 			gBottom.drawImage(this.image, affTOp, this.destX, this.destY);
 		}
+		return gBottom;
 	}
 
-	public void emphasize(int ptX, int ptY) {
-		if(array[i][j].contains(ptX, ptY)) {
-			array[i][j].show = true;
-			array[i][j].emphasis = true;
-			zoom = 1 + (random.nextDouble() * (maxZoom -1));
-			affT.scale(zoom, zoom);
-			array[i][j].destX = array[i][j].originX;
-			array[i][j].destY = array[i][j].originY;
+	public void emphasize(int ptX, int ptY, double maxZoom) {
+		if(this.contains(ptX, ptY)) {
+			this.show = true;
+			this.emphasis = true;
+			double zoom = 1 + (random.nextDouble() * (maxZoom -1));
+			this.affT.scale(zoom, zoom);
+			this.destX = this.originX;
+			this.destY = this.originY;
 		}
 	}
+
+	public void setDestinationCoordinates(int destX, int destY) {
+		this.destX = destX;
+		this.destY = destY;
+	}
+
+
 }
