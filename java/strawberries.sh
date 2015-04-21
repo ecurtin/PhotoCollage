@@ -1,0 +1,1 @@
+java HockneyComposite ./input/strawberries.jpg ./output/strawberryComposite.png 235 236 230 5 7 5 30 10 1.2 0.5

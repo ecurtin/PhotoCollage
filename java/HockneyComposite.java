@@ -9,6 +9,7 @@ import java.awt.Color;
 public class HockneyComposite {
 	public static void main(String[] args) {
 		String filename;
+		String outfile;
 		BufferedImage mainImage = null;
 		BufferedImage base = null;
 		Random random = new Random();
@@ -35,20 +36,21 @@ public class HockneyComposite {
 		System.out.println("VARIABLES\n");
 
 		filename = args[0];
-		baseR = Integer.parseInt(args[1]);
-		baseG = Integer.parseInt(args[2]);
-		baseB = Integer.parseInt(args[3]);
-		rows = Integer.parseInt(args[4]);
-		columns = Integer.parseInt(args[5]);
-		borderWidth = Integer.parseInt(args[6]);
-		maxScatter = Integer.parseInt(args[7]);
-		minScatter = Integer.parseInt(args[8]);
-		maxZoom = Double.parseDouble(args[9]);
-		minZoom = Double.parseDouble(args[10]);
+		outfile = args[1];
+		baseR = Integer.parseInt(args[2]);
+		baseG = Integer.parseInt(args[3]);
+		baseB = Integer.parseInt(args[4]);
+		rows = Integer.parseInt(args[5]);
+		columns = Integer.parseInt(args[6]);
+		borderWidth = Integer.parseInt(args[7]);
+		maxScatter = Integer.parseInt(args[8]);
+		minScatter = Integer.parseInt(args[9]);
+		maxZoom = Double.parseDouble(args[10]);
+		minZoom = Double.parseDouble(args[11]);
 		
-		emphasisPoints = new int[args.length - 11];
-		for(int i = 11; i < args.length; i++) {
-			emphasisPoints[i - 11] = Integer.parseInt(args[i]); 
+		emphasisPoints = new int[args.length - 12];
+		for(int i = 12; i < args.length; i++) {
+			emphasisPoints[i - 12] = Integer.parseInt(args[i]); 
 		}
 		//System.out.println("emphasisPoints.lenght: "+emphasisPoints.length);
 
@@ -56,6 +58,7 @@ public class HockneyComposite {
 		System.out.println("border color : ("+baseR+", "+baseG+", "+baseB+")");
 		System.out.println("rows:        : "+ rows);
 		System.out.println("columns      : "+ columns);
+		System.out.println("borderWidth  : "+ borderWidth);
 		System.out.println("maxScatter   : "+ maxScatter);
 		System.out.println("minScatter   : "+ minScatter);
 		System.out.println("maxZoom      : "+ maxZoom);
@@ -98,21 +101,28 @@ public class HockneyComposite {
 			for(int j = 0; j < tiles[0].length; j++) {
 				destX = borderWidth + (tileWidth + borderWidth) * j;
 				x = tileWidth * j;
+				//System.out.println("Selecting starting from: x = "+x+", y = "+y);
 
-				tiles[i][j] = new ImageTile(mainImage, x, y, minScatter, maxScatter);
+				tiles[i][j] = new ImageTile(mainImage, x, y, tileWidth, tileHeight, minScatter, maxScatter);
 				tiles[i][j].setDestinationCoordinates(destX, destY);
+				tiles[i][j].randomBrightness();
 			}
 
 		}
 
-		Graphics2D mainImageGraphics = mainImage.createGraphics();
+
 		for(int i  = 0; i < tiles.length; i++) {
 			for(int j = 0; j < tiles[0].length; j++) {
-				mainImageGraphics = tiles[i][j].compositeTile(mainImageGraphics);
+				g = tiles[i][j].compositeTile(g);
 			}
 		}
-		mainImageGraphics.dispose();
+		g.dispose();
 
+		try {
+	        ImageIO.write(base, "png", new File(outfile));
+	    } catch (IOException e) {
+	        e.printStackTrace();
+	    }
 		
 	}
 }

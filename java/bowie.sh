@@ -1,0 +1,1 @@
+java HockneyComposite ./input/DavidBowie.jpeg ./output/BowieComposite.png 235 236 230 7 7 15 30 10 1.2 0.5 233 226 322 225 277 314

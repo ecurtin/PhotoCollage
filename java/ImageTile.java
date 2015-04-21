@@ -4,6 +4,7 @@ import java.lang.Math;
 import java.util.Random;
 import java.awt.geom.AffineTransform;
 import java.awt.image.AffineTransformOp;
+import java.awt.image.RescaleOp;
 
 public class ImageTile {
 	public BufferedImage image;
@@ -25,25 +26,39 @@ public class ImageTile {
 		affT = new AffineTransform();
 	}
 
-	public ImageTile(BufferedImage img, int startX, int startY, int minScatter, int maxScatter) {
-		image = img;
+	public ImageTile(BufferedImage img, int startX, int startY, int tileWidth, int tileHeight, int minScatter, int maxScatter) {
+		// System.out.println("Starting Method");
+		// System.out.println("startX:    "+startX);
+		// System.out.println("startY:    "+startY);
+		// System.out.println("tileWidth: "+tileWidth);
+		// System.out.println("tileHeight:"+tileHeight);
+		// System.out.println("minScatter:"+minScatter);
+		// System.out.println("maxScatter:"+maxScatter);
 		random = new Random();
 		affT = new AffineTransform();
 
-		int x = -1;
-		int y = -1;
+		int x = 0;
+		int y = 0;
 
 		double distance = minScatter + (random.nextDouble() * (maxScatter - minScatter));
 		Vector2D vec = new Vector2D(0.0, distance);
 		vec.scaleBy(random.nextDouble());
-
-		while(x < 0 || x > image.getWidth() || y < 0 || y > image.getHeight()) {
+		do{
 			vec.rotateBy(2 * Math.PI * random.nextDouble());
 			int vecX = (int) Math.round(vec.x);
 			int vecY = (int) Math.round(vec.y);
 			x = startX + vecX;
 			y = startY + vecY;
-		}
+
+		}while(
+			x < 0 || 
+			(x + tileWidth) > img.getWidth() || 
+			y < 0 || 
+			(y + tileHeight) > img.getHeight()
+			);
+
+		BufferedImage subImage = img.getSubimage(x, y, tileWidth, tileHeight);
+		this.image = subImage;
 
 		this.originX = x;
 		this.originY = y;
@@ -110,5 +125,14 @@ public class ImageTile {
 		this.destY = destY;
 	}
 
+	public void changeBrightness(float percentage) {
+		RescaleOp op = new RescaleOp(percentage, 0, null);
+    	this.image = op.filter(this.image, null);
+	}
 
+	public void randomBrightness() {
+		float rand = random.nextFloat();
+		float percentage = 0.96f + (rand * 0.6f);
+		changeBrightness(percentage);
+	}
 }
