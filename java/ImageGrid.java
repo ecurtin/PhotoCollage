@@ -7,7 +7,6 @@ All the functionality in splitImage() should get transferred to ImageTile
 or taken out to the main method in HockneyCollage.
 */
 
-
 public class ImageGrid {
 	BufferedImage mainImage;
 	Random random = new Random();
