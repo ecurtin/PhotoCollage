@@ -10,6 +10,7 @@ public class HockneyCollage {
 	public static void main(String[] args) {
 		ImageGrid imageGrid = null;
 		String filename;
+		String outfile;
 		BufferedImage mainImage = null;
 		BufferedImage base = null;
 		Random random = new Random();
@@ -38,23 +39,24 @@ public class HockneyCollage {
 		System.out.println("VARIABLES\n");
 
 		filename = args[0];
-		baseR = Integer.parseInt(args[1]);
-		baseG = Integer.parseInt(args[2]);
-		baseB = Integer.parseInt(args[3]);
-		layers = Integer.parseInt(args[4]);
-		maxTileWidth = Integer.parseInt(args[5]);
-		minTileWidth = Integer.parseInt(args[6]);
-		maxTileHeight = Integer.parseInt(args[7]);
-		minTileHeight = Integer.parseInt(args[8]);
-		maxScatter = Integer.parseInt(args[9]);
-		minScatter = Integer.parseInt(args[10]);
-		maxZoom = Double.parseDouble(args[11]);
-		minZoom = Double.parseDouble(args[12]);
-		density = Double.parseDouble(args[13]);
+		outfile = args[1];
+		baseR = Integer.parseInt(args[2]);
+		baseG = Integer.parseInt(args[3]);
+		baseB = Integer.parseInt(args[4]);
+		layers = Integer.parseInt(args[5]);
+		maxTileWidth = Integer.parseInt(args[6]);
+		minTileWidth = Integer.parseInt(args[7]);
+		maxTileHeight = Integer.parseInt(args[8]);
+		minTileHeight = Integer.parseInt(args[9]);
+		maxScatter = Integer.parseInt(args[10]);
+		minScatter = Integer.parseInt(args[11]);
+		maxZoom = Double.parseDouble(args[12]);
+		minZoom = Double.parseDouble(args[13]);
+		density = Double.parseDouble(args[14]);
 		
-		emphasisPoints = new int[args.length - 14];
-		for(int i = 14; i < args.length; i++) {
-			emphasisPoints[i - 14] = Integer.parseInt(args[i]); 
+		emphasisPoints = new int[args.length - 15];
+		for(int i = 15; i < args.length; i++) {
+			emphasisPoints[i - 15] = Integer.parseInt(args[i]); 
 		}
 		//System.out.println("emphasisPoints.lenght: "+emphasisPoints.length);
 
@@ -70,7 +72,6 @@ public class HockneyCollage {
 		System.out.println("minZoom      : "+ minZoom);
 		
 		for(int i = 0; i < emphasisPoints.length; i = i+2) {
-			//System.out.println("i: "+i);
 			System.out.println("emphasisPt   : ("+ emphasisPoints[i] + ", "+ emphasisPoints[i+1] +")");
 		}
 
@@ -78,55 +79,67 @@ public class HockneyCollage {
 		for(int i = 0; i < layers; i++) {
 			tileLayers[i] = null;
 		}
-		
-		try {
+	
+		try{		
 			mainImage = ImageIO.read(new File(filename));			
-			imageGrid = new ImageGrid(mainImage);
-			base = new BufferedImage(mainImage.getWidth(), mainImage.getHeight(), BufferedImage.TYPE_INT_RGB);
-			Graphics2D g = base.createGraphics();
-			g.setPaint(new Color(baseR, baseG, baseB));
-			g.fillRect(0, 0, base.getWidth(), base.getHeight());
+		}
+		catch(Exception e) {
+			e.printStackTrace();
+		}
+		imageGrid = new ImageGrid(mainImage);
+		base = new BufferedImage(mainImage.getWidth(), mainImage.getHeight(), BufferedImage.TYPE_INT_RGB);
+		Graphics2D g = base.createGraphics();
+		g.setPaint(new Color(baseR, baseG, baseB));
+		g.fillRect(0, 0, base.getWidth(), base.getHeight());
 
 
-			int widthDelta = (maxTileWidth - minTileWidth) / layers;
-			int heightDelta = (maxTileHeight - minTileHeight) / layers;
+		int widthDelta = (maxTileWidth - minTileWidth) / layers;
+		int heightDelta = (maxTileHeight - minTileHeight) / layers;
 
-			for(int layer = 0; layer < layers; layer++) {
-				// int thisLayersTileWidth = minTileWidth + (layer * widthDelta);
-				// int thisLayersTileHeight = minTileHeight + (layer * heightDelta);
-				// int thisLayersColumns = (mainImage.getWidth() / thisLayersTileWidth) * 2;
-				// int thisLayersRows = (mainImage.getHeight() / thisLayersTileHeight) * 2;
-				// //tileLayers[layer] = new ImageTile[thisLayersRows][thisLayersColumns];
-				// tileLayers[layer] = imageGrid.splitImage(thisLayersRows, thisLayersColumns, thisLayersTileWidth, thisLayersTileHeight);
-				
-				// for(int i = 0; i < layer[0].length; i++) {
-				// 	for(int j = 0; j < layer[0][0].length; j++)
-				// 		tileLayers[layer][i][j].scatter(minScatter, maxScatter);
-				// 		tileLayers[layer][i][j].randomShow(density);
-				// 		tileLayers[layer][i][j].randomZoom(minZoom, maxZoom);
-						
-				// }
-				// //tileLayers[layer] = imageGrid.randomScatter(tileLayers[layer], );
-				// tileLayers[layer] = imageGrid.randomShow(tileLayers[layer], density);
-				// tileLayers[layer] = imageGrid.assignRandomZoom(tileLayers[layer], maxZoom, minZoom);
-				// for(int i = 0; i < emphasisPoints.length; i = i + 2) {
-				// 	tileLayers[layer] = imageGrid.emphasizePoint(tileLayers[layer], emphasisPoints[i], emphasisPoints[i + 1], maxZoom);
-				// }
+		for(int layer = 0; layer < tileLayers.length; layer++) {
+			int thisLayersTileWidth = minTileWidth + (layer * widthDelta);
+			int thisLayersTileHeight = minTileHeight + (layer * heightDelta);
+			int thisLayersColumns = (mainImage.getWidth() / thisLayersTileWidth) * 2;
+			int thisLayersRows = (mainImage.getHeight() / thisLayersTileHeight) * 2;
+			//tileLayers[layer] = new ImageTile[thisLayersRows][thisLayersColumns];
+			tileLayers[layer] = imageGrid.splitImage(thisLayersRows, thisLayersColumns, thisLayersTileWidth, thisLayersTileHeight);
+			
+			for(int i = 0; i < tileLayers[0].length; i++) {
+				for(int j = 0; j < tileLayers[0][0].length; j++){
+					tileLayers[layer][i][j].scatter(minScatter, maxScatter);
+					tileLayers[layer][i][j].randomShow(density);
+					tileLayers[layer][i][j].randomZoom(minZoom, maxZoom);
+					for(int k = 0; k < emphasisPoints.length; k = k + 2) {
+						tileLayers[layer][i][j].emphasize(emphasisPoints[k], emphasisPoints[k + 1], maxZoom);
+					}
+					if(!tileLayers[layer][i][j].emphasis) {
+						tileLayers[layer][i][j].compositeTile(g);
+					}
+
+				}
+					
 			}
 
-			for(int i = 0; i < tileLayers.length; i++) {
-				base = imageGrid.compositeTilesNormal(base, tileLayers[i]);
+		}
+		//put emphasis layers on top
+		for(int layer = 0; layer < tileLayers.length; layer++) {
+			for(int i = 0; i < tileLayers[0].length; i++) {
+				for(int j = 0; j < tileLayers[0][0].length; j++){
+					if(tileLayers[layer][i][j].emphasis) {
+						tileLayers[layer][i][j].compositeTile(g);
+					}
+				}
 			}
+		}
 
-			for(int i = tileLayers.length - 1; i >= 0; i--) {
-				base = imageGrid.compositeTilesEmphasis(base, tileLayers[i]);
-			}
 
-			imageGrid.outputImage(base);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-		
+		g.dispose();
+
+		try {
+	        ImageIO.write(base, "png", new File(outfile));
+	    } catch (IOException e) {
+	        e.printStackTrace();
+	    }
 
 
 	}
