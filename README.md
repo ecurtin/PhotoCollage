@@ -2,6 +2,7 @@
 Creating David Hockney style photo collages
 
 To build and use:
+
 1. Download files from Github
 2. In a terminal, navigate to the java folder inside the project
 3. Build the files: <addr>~$ make
