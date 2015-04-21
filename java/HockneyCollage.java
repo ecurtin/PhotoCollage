@@ -6,6 +6,11 @@ import java.util.Random;
 import java.awt.Graphics2D;
 import java.awt.Color;
 
+/*
+TODO: GET RID OF THE IMAGEGRID DEPENDENCIES
+*/
+
+
 public class HockneyCollage {
 	public static void main(String[] args) {
 		ImageGrid imageGrid = null;
