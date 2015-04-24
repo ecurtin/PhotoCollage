@@ -1,7 +1,13 @@
 # PhotoCollage
 Creating David Hockney style photo collages
 
-To build and use:
+Sample:
+Input:
+![Input](http://framebit.org/wp-content/uploads/2015/04/DavidBowie.jpeg)
+Output:
+![Composite Output](http://framebit.org/wp-content/uploads/2015/04/BowieComposite.png)
+
+Build & Use:
 
 1. Download files from Github
 2. In a terminal, navigate to the java folder inside the project
