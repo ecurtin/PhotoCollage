@@ -2,9 +2,13 @@
 Creating David Hockney style photo collages
 
 Sample:
+
 Input:
+
 ![Input](http://framebit.org/wp-content/uploads/2015/04/DavidBowie.jpeg)
+
 Output:
+
 ![Composite Output](http://framebit.org/wp-content/uploads/2015/04/BowieComposite.png)
 
 Build & Use:
